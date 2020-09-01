@@ -7,6 +7,7 @@
 #include "Spout/SpoutDirectX.h"
 #include "Spout/SpoutSenderNames.h"
 
+
 // Debug logging macro
 #if defined(_DEBUG)
 #define DEBUG_LOG(fmt, ...) std::printf("KlakSpout: "#fmt"\n", __VA_ARGS__)
@@ -24,6 +25,7 @@ namespace klakspout
         ID3D11Device* d3d11_;
         std::unique_ptr<spoutDirectX> spout_;
         std::unique_ptr<spoutSenderNames> sender_names_;
+        
 
         static Globals& get()
         {

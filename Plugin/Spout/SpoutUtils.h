@@ -1,13 +1,12 @@
 /*
 
-			SpoutCommon.h
+						SpoutUtils.h
 
-			Enables build of the SDK as a DLL
-			Includes header for utilities - SpoutUtils
-			Optional legacyOpenGL define to enable legacy draw functions
+					General utility functions
 
+		- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-		Copyright (c) 2014-2020, Lynn Jarvis. All rights reserved.
+		Copyright (c) 2017-2020, Lynn Jarvis. All rights reserved.
 
 		Redistribution and use in source and binary forms, with or without modification, 
 		are permitted provided that the following conditions are met:
@@ -29,31 +28,37 @@
 		LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 		OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-
 */
 #pragma once
+#ifndef __spoutUtils__ // standard way as well
+#define __spoutUtils__
 
-#ifndef __SpoutCommon__
-#define __SpoutCommon__
+#include <windows.h>
+#include <stdio.h> // for console
+#include <iostream> // std::cout, std::end
+#include <fstream> // for log file
+#include <io.h> // for _access
+#include <vector>
+#include <string>
 
-#if defined(_MSC_VER)
-	#if defined(SPOUT_BUILD_DLL)
-		#define SPOUT_DLLEXP	__declspec(dllexport)
-	#elif defined(SPOUT_IMPORT_DLL)
-		#define SPOUT_DLLEXP	__declspec(dllimport)
-	#else
-		#define SPOUT_DLLEXP
-	#endif
-#else // _MSC_VER
-	#define SPOUT_DLLEXP
-#endif // _MSC_VERR
+#pragma comment(lib, "Advapi32.lib") // for registry functions
 
-// This definition enables legacy OpenGL rendering code
-// used for shared texture Draw functions
-// Disable for OpenGL 4 compliance
-#define legacyOpenGL
+namespace spoututils {
 
-// Common utility functions namespace
-#include "SpoutUtils.h"
+	// Log level definitions
+
+
+	// Registry utility functions
+ 	bool ReadDwordFromRegistry(HKEY hKey, const char *subkey, const char *valuename, DWORD *pValue);
+	bool WriteDwordToRegistry(HKEY hKey, const char *subkey, const char *valuename, DWORD dwValue);
+	bool ReadPathFromRegistry(HKEY hKey, const char *subkey, const char *valuename, char *filepath);
+	bool WritePathToRegistry(HKEY hKey, const char *subkey, const char *valuename, const char *filepath);
+	bool RemovePathFromRegistry(HKEY hKey, const char *subkey, const char *valuename);
+	bool RemoveSubKey(HKEY hKey, const char *subkey);
+	bool FindSubKey(HKEY hKey, const char *subkey);
+
+
+
+}
 
 #endif

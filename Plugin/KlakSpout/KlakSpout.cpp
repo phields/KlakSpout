@@ -1,9 +1,11 @@
 #include "KlakSpoutSharedObject.h"
 #include "Unity/IUnityGraphics.h"
 #include "Unity/IUnityGraphicsD3D11.h"
+#include "Spout/SpoutUtils.h"
 #include <mutex>
 
-namespace
+
+namespace 
 {
     // Low-level native plugin interface
     IUnityInterfaces* unity_;
@@ -41,7 +43,7 @@ namespace
 
             // Apply the max sender registry value.
             DWORD max_senders;
-            if (g.spout_->ReadDwordFromRegistry(&max_senders, "Software\\Leading Edge\\Spout", "MaxSenders"))
+            if (ReadDwordFromRegistry(HKEY_CURRENT_USER, "Software\\Leading Edge\\Spout", "MaxSenders", &max_senders))
                 g.sender_names_->SetMaxSenders(max_senders);
         }
         else if (event_type == kUnityGfxDeviceEventShutdown)
@@ -123,7 +125,7 @@ extern "C" void UNITY_INTERFACE_EXPORT * CreateSender(const char* name, int widt
 
 extern "C" void UNITY_INTERFACE_EXPORT * CreateReceiver(const char* name)
 {
-    if (!klakspout::Globals::get().isReady()) return nullptr;
+    if (!klakspout::Globals::get().isReady()) return nullptr;   
     return new klakspout::SharedObject(klakspout::SharedObject::Type::receiver, name != nullptr ? name : "");
 }
 
